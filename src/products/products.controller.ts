@@ -15,7 +15,6 @@ export class ProductsController {
     @Get()
     getAll(){
         console.log('findOne');
-        
         return this.productService.getAll()
     }
     @Delete(':id')
@@ -26,16 +25,8 @@ export class ProductsController {
     create(@Body() createProductDto: CreateProductDto){
         return this.productService.create(createProductDto)
     }
-    @Get(':/product/:search:')
-    search(
-        @Param('search') @Query() search:string,
-        @Param('product') @Query() product:string,
-        ){
-        console.log('search',search);
-        return this.productService.search(search,product)
-    }
     @Post(':id')
-    update(id:number,updateProductDto:UpdateProductDto){
+    update(@Param('id') id:number,@Body() updateProductDto:UpdateProductDto){
         return this.productService.update(id,updateProductDto)
     }
 
