@@ -4,12 +4,14 @@ import { Repository } from "typeorm";
 import { Body, Injectable } from "@nestjs/common";
 import { CreateProductDto } from "./dto/create-pruduct.dto";
 import { UpdateProductDto } from "./dto/update-prorduct.dto";
+import { CategoryEntity } from "src/category/entitiy/category.entity";
 @Injectable()
 export class ProductRepository {
     constructor(@InjectRepository(ProductEntity) private prouductRepository:Repository<ProductEntity>){}
     async findOne(id:number){
         return await this.prouductRepository
         .createQueryBuilder('product')
+        .leftJoinAndSelect('product.categories', 'category')
         .where('product.id = :id', {id: `${id}`})
         .getOne()
     }
@@ -28,16 +30,30 @@ export class ProductRepository {
         .execute()
     }
 
-    async create(createProduct: CreateProductDto){
-        const newProduct = await this.prouductRepository
-        .createQueryBuilder()
-        .insert()
-        .values(createProduct)
-        .execute()
+    async create(createProduct: CreateProductDto) {
+        const product = new ProductEntity()
+        product.name = createProduct.name
+        product.price = createProduct.price
+        product.description= createProduct.description
+        product.image = createProduct.image
 
-        return newProduct.generatedMaps
+        const  categoryAraay: CategoryEntity[] = []
 
+        for(const categoriesId of createProduct.categories) {
+            const category = new CategoryEntity()
+            category.id = categoriesId
+            console.log(category , 'category')
+            categoryAraay.push(category)
+        }
+        
+        
+        product.categories = categoryAraay
+
+        return await this.prouductRepository.save(product)
+        
     }
+    
+    
 
     async orderByAsc(){
         return this.prouductRepository
@@ -50,7 +66,6 @@ export class ProductRepository {
         const newProduct =  this.prouductRepository
         .createQueryBuilder('product')
         .update()
-        .set(updateProductDto)
         .where('product.id = :id', {id:id})
         .execute()
 

@@ -8,9 +8,7 @@ import { UpdateCategoryDto } from "../dto/category-update.dto";
 @Injectable()
 export class CategoryRepository {
     constructor(@InjectRepository(CategoryEntity)
-                private  categoryRepo:Repository<CategoryEntity> ){}
-
-
+                private  categoryRepo:Repository<CategoryEntity>){}
     async create(createCategoryDto:CategoryDto){
         const category = await this.categoryRepo
         .createQueryBuilder()

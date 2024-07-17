@@ -1,13 +1,9 @@
 import { CategoryEntity } from "src/category/entitiy/category.entity"
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
-import { Url } from "url"
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 @Entity()
 export class ProductEntity {
-    @PrimaryGeneratedColumn()
+@PrimaryGeneratedColumn()
     id:number
-
-    @Column()
-    productId:number
 
     @Column({type: 'varchar', length:255})
     name:string
@@ -15,22 +11,19 @@ export class ProductEntity {
     @Column({type: 'decimal'})
     price:number
 
-    @Column()
-    category:string
-
     @Column({type: 'decimal', default: 0})
     sale:number
 
     @Column({type: 'longtext'})
     description:string
 
+    @ManyToMany(() => CategoryEntity, (categories) => categories, {cascade: true})
+    @JoinTable()
+    categories!:CategoryEntity[]
+
     @Column()
     image:string
-
-    @ManyToMany(() => CategoryEntity, (category) => category.product)
-    @JoinColumn()
-    Category:CategoryEntity[]
-
+    
     @CreateDateColumn()
     createdAt:Date
 

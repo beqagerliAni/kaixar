@@ -1,25 +1,26 @@
-import { ProductEntity } from "src/products/entity/product.entity"
-import { CreateDateColumn, UpdateDateColumn, DeleteDateColumn, Column, PrimaryGeneratedColumn, Entity, ManyToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable, DeleteDateColumn } from 'typeorm';
+import { ProductEntity } from 'src/products/entity/product.entity';
+
 @Entity()
 export class CategoryEntity {
     @PrimaryGeneratedColumn()
-    id:number
+    id: number;
 
-    @Column({type: "varchar"})
-    name:string
-    
-    @CreateDateColumn()
-    createdAt:Date
-
-    @UpdateDateColumn()
-    updatedAt:Date
-
-    @DeleteDateColumn()
-    deletedAt:Date
+    @Column({ type: 'varchar' })
+    name: string;
 
     @Column()
-    categoryId:number
+    imgUrl: string;
+    
+    @CreateDateColumn()
+    createdAt: Date;
 
-    @ManyToMany(() => ProductEntity, (product) =>  product.category)
-    product:ProductEntity[]
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @DeleteDateColumn()
+    deletedAt: Date;
+
+    @ManyToMany(() => ProductEntity, product => product.categories)
+    products!: ProductEntity[]
 }
