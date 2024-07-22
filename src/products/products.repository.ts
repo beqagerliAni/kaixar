@@ -42,7 +42,6 @@ export class ProductRepository {
         for(const categoriesId of createProduct.categories) {
             const category = new CategoryEntity()
             category.id = categoriesId
-            console.log(category , 'category')
             categoryAraay.push(category)
         }
         

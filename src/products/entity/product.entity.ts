@@ -1,5 +1,6 @@
 import { CategoryEntity } from "src/category/entitiy/category.entity"
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { Order } from "src/orders/entity/order.entity"
+import { Column, CreateDateColumn, DeleteDateColumn, Entity,  JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 @Entity()
 export class ProductEntity {
 @PrimaryGeneratedColumn()
@@ -20,6 +21,9 @@ export class ProductEntity {
     @ManyToMany(() => CategoryEntity, (categories) => categories, {cascade: true})
     @JoinTable()
     categories!:CategoryEntity[]
+
+    @ManyToOne(() => Order, (orders) => orders.products)
+    orders:Order
 
     @Column()
     image:string
